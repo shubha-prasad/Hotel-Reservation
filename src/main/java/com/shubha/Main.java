@@ -48,7 +48,12 @@ public class Main {
                    h.findCheapestHotel(hotel);
                    break;
                }
-
+               case 4 :
+               {
+                   hotel = h.updateHotelRates(hotel);
+                   break;
+               
+               }
                case 13 :
                {
                    flag=false;

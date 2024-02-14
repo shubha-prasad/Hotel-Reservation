@@ -81,6 +81,33 @@ public class HotelController {
         System.out.println("Cheapest Hotel: "+cheapestHotel);
         System.out.println("--------------------------------------");
     }
+
+    public Map<String, Hotels> updateHotelRates(Map<String, Hotels> hotels) {
+        System.out.println("Enter the name of the hotel to update rates: ");
+        String hotelName = s.nextLine();
+
+        if (hotels.containsKey(hotelName)) {
+            Hotels hotel = hotels.get(hotelName);
+
+            System.out.println("Enter new Weekday Rate: ");
+            hotel.setWeekDayRate(s.nextInt());
+
+            System.out.println("Enter new Weekend Rate: ");
+            hotel.setWeekEndRate(s.nextInt());
+
+            System.out.println("Enter new Weekday Reward Price: ");
+            hotel.setWeekDayReward(s.nextInt());
+
+            System.out.println("Enter new Weekend Reward Price: ");
+            hotel.setWeekEndReward(s.nextInt());
+
+            hotels.put(hotelName,hotel);
+            System.out.println("Rates updated successfully for " + hotelName);
+        } else {
+            System.out.println("Hotel not found!");
+        }
+        return hotels;
+    }
 }
 
 
