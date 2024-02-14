@@ -1,8 +1,9 @@
 package com.shubha;
 
-import com.shubha.hotel.entity.HotelController;
+import com.shubha.hotel.controller.HotelController;
 import com.shubha.hotel.entity.Hotels;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -42,6 +43,12 @@ public class Main {
                    h.display(hotel);
                    break;
                }
+               case 3 :
+               {
+                   h.findCheapestHotel(hotel);
+                   break;
+               }
+
                case 13 :
                {
                    flag=false;
