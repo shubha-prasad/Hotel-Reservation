@@ -26,7 +26,6 @@ public class HotelController {
 
     public void display(Map<String, Hotels> map) {
         Set<String> keys=map.keySet();
-
         for(String key:keys){
             Hotels hotel=map.get(key);
             System.out.println(hotel);
