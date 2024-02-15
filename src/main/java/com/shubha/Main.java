@@ -23,13 +23,14 @@ public class Main {
         hotel.put("Ridgewood", new Hotels("Ridgewood", 5, 220, 150, 100, 40));
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
        boolean flag = true;
        while(flag)
        {
            System.out.println("Enter choice");
            System.out.println("---------------------");
-           System.out.println("1: Add Hotel\n2: Display hotels\n13: Exit");
+           System.out.println("1: Add Hotel\n2: Display hotels\n3: Cheapest Hotel\n4 : Update Rate"
+                   + "\n5: find cheapest hotel for date range\n6: Update ratings\n13: Exit");
            System.out.println("-------------------------");
            int choice = s.nextInt();
            switch(choice){
@@ -50,9 +51,13 @@ public class Main {
                }
                case 4 :
                {
-                   hotel = h.updateHotelRates(hotel);
+                   h.updateHotelRates(hotel);
                    break;
-               
+               }
+               case 6 :
+               {
+                   h.findCheapestHotelForDateRange(hotel);
+                   break;
                }
                case 13 :
                {
