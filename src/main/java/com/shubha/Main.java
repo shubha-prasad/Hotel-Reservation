@@ -76,6 +76,10 @@ public class Main {
                    h.addSpecialRates(hotel);
                    break;
                }
+               case 10:{
+                   h.cheapestBestRatedForReward(hotel);
+                   break;
+               }
                case 13 :
                {
                    flag=false;
