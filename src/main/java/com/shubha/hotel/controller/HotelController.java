@@ -7,7 +7,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HotelController {
 
@@ -316,7 +319,44 @@ public class HotelController {
         }
 
     }
+
+    public void findCheapestBestRatedHotelForRegularCustomers(Map<String, Hotels> hotels) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Input start date
+        System.out.println("Enter start date (DDMMYY):");
+        String startDateString = scanner.next();
+// Input end date
+        System.out.println("Enter end date (DDMMYY):");
+        String endDateString = scanner.next();
+
+// Adjust format to match input date format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMuu", Locale.ENGLISH); // Note the change in format string
+        LocalDate startDate = LocalDate.parse(startDateString, formatter);
+        LocalDate endDate = LocalDate.parse(endDateString, formatter);
+
+
+        // Calculate total days
+        long totalDays = endDate.toEpochDay() - startDate.toEpochDay() + 1;
+
+        // Calculate total cost for each hotel using Java streams
+        String cheapestBestRatedHotel = hotels.entrySet().stream()
+                .map(entry -> {
+                    int totalCost = entry.getValue().calculateTotalCostForRegularCustomer(startDate, endDate);
+                    return Map.entry(entry.getKey(), totalCost);
+                })
+                .min(Map.Entry.comparingByValue())
+                .orElseThrow()
+                .getKey();
+
+        // Output the result
+        System.out.println("--------------------------------------");
+        System.out.println("Cheapest Best Rated Hotel for the date range " + startDateString + " to " + endDateString + " for a Regular Customer:");
+        System.out.println(cheapestBestRatedHotel + ", Rating: " + hotels.get(cheapestBestRatedHotel).getRating() + " and Total Rates: $" + hotels.get(cheapestBestRatedHotel).calculateTotalCostForRegularCustomer(startDate, endDate));
+        System.out.println("--------------------------------------");
+    }
 }
+
 
 
 
