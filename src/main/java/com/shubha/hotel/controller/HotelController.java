@@ -109,6 +109,24 @@ public class HotelController {
         return hotels;
     }
 
+    public Map<String, Hotels> addratings(Map<String, Hotels> hotels) {
+        System.out.println("Enter the name of the hotel to update rates: ");
+        String hotelName = s.nextLine();
+
+        if (hotels.containsKey(hotelName)) {
+            Hotels hotel = hotels.get(hotelName);
+
+            System.out.println("Enter your Ratings: ");
+            hotel.setRating(s.nextInt());
+
+            hotels.put(hotelName,hotel);
+            System.out.println("Ratings updated successfully for " + hotelName);
+        } else {
+            System.out.println("Ratings not found!");
+        }
+        return hotels;
+    }
+
     public void findCheapestHotelForDateRange(Map<String, Hotels> hotels) throws ParseException, ParseException {
         int minCost = Integer.MAX_VALUE;
         String cheapestHotel = "";

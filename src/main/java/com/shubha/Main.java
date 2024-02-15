@@ -54,6 +54,11 @@ public class Main {
                    h.updateHotelRates(hotel);
                    break;
                }
+               case 5 :
+               {
+                   h.addratings(hotel);
+                   break;
+               }
                case 6 :
                {
                    h.findCheapestHotelForDateRange(hotel);
