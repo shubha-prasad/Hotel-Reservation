@@ -23,13 +23,14 @@ public class Main {
         hotel.put("Ridgewood", new Hotels("Ridgewood", 5, 220, 150, 100, 40));
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
        boolean flag = true;
        while(flag)
        {
            System.out.println("Enter choice");
            System.out.println("---------------------");
-           System.out.println("1: Add Hotel\n2: Display hotels\n13: Exit");
+           System.out.println("1: Add Hotel\n2: Display hotels\n3: Cheapest Hotel\n4 : Update Rate"
+                   + "\n5: find cheapest hotel for date range\n6: Update ratings\n13: Exit");
            System.out.println("-------------------------");
            int choice = s.nextInt();
            switch(choice){
@@ -48,7 +49,45 @@ public class Main {
                    h.findCheapestHotel(hotel);
                    break;
                }
-
+               case 4 :
+               {
+                   h.updateHotelRates(hotel);
+                   break;
+               }
+               case 5 :
+               {
+                   h.addratings(hotel);
+                   break;
+               }
+               case 6 :
+               {
+                   h.findCheapestHotelForDateRange(hotel);
+                   break;
+               }
+               case 7:{
+                   h.findCheapestBestRatedHotelForDateRange(hotel);
+                   break;
+               }
+               case 8:{
+                   h.findBestRatedHotel(hotel);
+                   break;
+               }
+               case 9:{
+                   h.addSpecialRates(hotel);
+                   break;
+               }
+               case 10:{
+                   h.cheapestBestRatedForReward(hotel);
+                   break;
+               }
+               case 11:{
+                   h.findCheapestBestRatedHotelForRewardCustomer(hotel);
+                   break;
+               }
+               case 12:{
+                   h.findCheapestBestRatedHotelForRegularCustomers(hotel);
+                   break;
+               }
                case 13 :
                {
                    flag=false;
