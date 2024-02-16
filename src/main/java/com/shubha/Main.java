@@ -54,9 +54,38 @@ public class Main {
                    h.updateHotelRates(hotel);
                    break;
                }
+               case 5 :
+               {
+                   h.addratings(hotel);
+                   break;
+               }
                case 6 :
                {
                    h.findCheapestHotelForDateRange(hotel);
+                   break;
+               }
+               case 7:{
+                   h.findCheapestBestRatedHotelForDateRange(hotel);
+                   break;
+               }
+               case 8:{
+                   h.findBestRatedHotel(hotel);
+                   break;
+               }
+               case 9:{
+                   h.addSpecialRates(hotel);
+                   break;
+               }
+               case 10:{
+                   h.cheapestBestRatedForReward(hotel);
+                   break;
+               }
+               case 11:{
+                   h.findCheapestBestRatedHotelForRewardCustomer(hotel);
+                   break;
+               }
+               case 12:{
+                   h.findCheapestBestRatedHotelForRegularCustomers(hotel);
                    break;
                }
                case 13 :

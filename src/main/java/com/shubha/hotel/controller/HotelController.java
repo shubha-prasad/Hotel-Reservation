@@ -6,7 +6,11 @@ import com.shubha.hotel.enums.Customer;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HotelController {
 
@@ -109,11 +113,29 @@ public class HotelController {
         return hotels;
     }
 
+    public Map<String, Hotels> addratings(Map<String, Hotels> hotels) {
+        System.out.println("Enter the name of the hotel to update rates: ");
+        String hotelName = s.nextLine();
+
+        if (hotels.containsKey(hotelName)) {
+            Hotels hotel = hotels.get(hotelName);
+
+            System.out.println("Enter your Ratings: ");
+            hotel.setRating(s.nextInt());
+
+            hotels.put(hotelName,hotel);
+            System.out.println("Ratings updated successfully for " + hotelName);
+        } else {
+            System.out.println("Ratings not found!");
+        }
+        return hotels;
+    }
+
     public void findCheapestHotelForDateRange(Map<String, Hotels> hotels) throws ParseException, ParseException {
         int minCost = Integer.MAX_VALUE;
         String cheapestHotel = "";
         int maxRating = Integer.MIN_VALUE;
-        // Input date range
+
         DateFormat df = new SimpleDateFormat("ddMMMyyyy");
         System.out.println("Enter the start date (DDMMMYYYY): ");
         Date startDate = df.parse(s.next());
@@ -125,10 +147,10 @@ public class HotelController {
         Calendar endCal = Calendar.getInstance();
         endCal.setTime(endDate);
 
-        // Calculate total days between start and end dates
+
         int totalDays = 1 + (int) ((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
 
-        // Iterate over each hotel to calculate the total cost
+
         for (Hotels hotel : hotels.values()) {
             int totalCost = 0;
             Calendar cal = (Calendar) startCal.clone();
@@ -149,7 +171,240 @@ public class HotelController {
         }
         System.out.println("Cheapest Hotel : "+cheapestHotel+"\nTotal Days: "+totalDays);
     }
+
+    public void findCheapestBestRatedHotelForDateRange(Map<String, Hotels> hotels){
+        System.out.println("Enter start date : Format -> yyyy mm dd");
+        int startYear=s.nextInt();
+        int startMonth=s.nextInt();
+        int startDay=s.nextInt();
+        System.out.println("Enter end date : Format -> yyyy mm dd");
+        int endYear=s.nextInt();
+        int endMonth=s.nextInt();
+        int endDay=s.nextInt();
+        LocalDate startDate=LocalDate.of(startYear,startMonth,startDay);
+        LocalDate endDate=LocalDate.of(endYear,endMonth,endDay);
+        int minCost = Integer.MAX_VALUE;
+        String cheapestBestRatedHotel = "";
+        int maxRating = Integer.MIN_VALUE;
+        for (Hotels hotel : hotels.values()) {
+            int totalCost =0;
+            int weekdayRate = hotel.getWeekDayRate();
+            int weekendRate = hotel.getWeekEndRate();
+            LocalDate currentDate = startDate;
+            while (!currentDate.isAfter(endDate)) {
+                int dayOfWeek = currentDate.getDayOfWeek().getValue();
+                if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+                    totalCost += weekdayRate;
+                } else {
+                    totalCost += weekendRate;
+                }
+                currentDate = currentDate.plusDays(1);
+            }
+            if (totalCost < minCost || (totalCost == minCost && hotel.getRating() > maxRating)) {
+                minCost = totalCost;
+                cheapestBestRatedHotel = hotel.getName();
+                maxRating = hotel.getRating();
+            }
+        }
+        System.out.println("--------------------------------------");
+        System.out.println(cheapestBestRatedHotel + ", Rating: " + maxRating + " and Total Rates: $" + minCost);
+        System.out.println("--------------------------------------");
+
+    }
+
+    public void findBestRatedHotel(Map<String, Hotels> hotels){
+        System.out.println("Enter start date : Format -> yyyy mm dd");
+        int startYear=s.nextInt();
+        int startMonth=s.nextInt();
+        int startDay=s.nextInt();
+        System.out.println("Enter end date : Format -> yyyy mm dd");
+        int endYear=s.nextInt();
+        int endMonth=s.nextInt();
+        int endDay=s.nextInt();
+
+        LocalDate startDate = LocalDate.of(startYear, startMonth, startDay);
+        LocalDate endDate = LocalDate.of(endYear, endMonth, endDay);
+
+        int maxRating = Integer.MIN_VALUE;
+        String bestRatedHotel = "";
+        int totalRates = 0;
+        for (Hotels hotel : hotels.values()) {
+            int totalCost = 0;
+            int weekdayRate = hotel.getWeekDayRate();
+            int weekendRate = hotel.getWeekEndRate();
+            LocalDate currentDate = startDate;
+            while (!currentDate.isAfter(endDate)) {
+                int dayOfWeek = currentDate.getDayOfWeek().getValue();
+                if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+                    totalCost += weekdayRate;
+                } else {
+                    totalCost += weekendRate;
+                }
+                currentDate = currentDate.plusDays(1);
+            }
+            if (hotel.getRating() > maxRating || (hotel.getRating() == maxRating && totalCost < totalRates)) {
+                maxRating = hotel.getRating();
+                bestRatedHotel = hotel.getName();
+                totalRates = totalCost;
+            }
+        }
+        System.out.println("--------------------------------------");
+        System.out.println("Best Rated Hotel for the date range " + startDate + " to " + endDate + ":");
+        System.out.println(bestRatedHotel + " & Total Rates $" + totalRates);
+        System.out.println("--------------------------------------");
+    }
+
+    public void addSpecialRates(Map<String,Hotels> hotels){
+
+        System.out.println("Enter Choice :\n1: REWARD\n or any number to exit");
+
+        if (s.nextInt() == 1){
+            for (Hotels h:hotels.values()){
+                if (h.getName().equals("Bridgewood")){
+                    h.setWeekDayReward(110);
+                    h.setWeekEndReward(50);
+                } else if (h.getName().equals(("Ridgewood"))) {
+                    h.setWeekDayReward(100);
+                    h.setWeekEndReward(40);
+                }
+                System.out.println(h.getName()+" "+h.getWeekDayReward()+" "+h.getWeekEndReward());
+            }
+
+        }
+        else{
+
+            System.out.println("Only for Reward Customers");
+        }
+    }
+
+    public void cheapestBestRatedForReward(Map<String, Hotels> hotels){
+        System.out.println("Enter Customer Type\nPress 1 for -> Reward\nAny other number for Regular");
+        if (s.nextInt()==1){
+            System.out.println("Enter start date : Format -> yyyy mm dd");
+            int startYear=s.nextInt();
+            int startMonth=s.nextInt();
+            int startDay=s.nextInt();
+            System.out.println("Enter end date : Format -> yyyy mm dd");
+            int endYear=s.nextInt();
+            int endMonth=s.nextInt();
+            int endDay=s.nextInt();
+            LocalDate startDate=LocalDate.of(startYear,startMonth,startDay);
+            LocalDate endDate=LocalDate.of(endYear,endMonth,endDay);
+            int minCost = Integer.MAX_VALUE;
+            String cheapestBestRatedHotel = "";
+            int maxRating = Integer.MIN_VALUE;
+            for (Hotels hotel : hotels.values()) {
+                int totalCost =0;
+                int weekdayRate = hotel.getWeekDayReward();
+                int weekendRate = hotel.getWeekEndReward();
+                LocalDate currentDate = startDate;
+                while (!currentDate.isAfter(endDate)) {
+                    int dayOfWeek = currentDate.getDayOfWeek().getValue();
+                    if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+                        totalCost += weekdayRate;
+                    } else {
+                        totalCost += weekendRate;
+                    }
+                    currentDate = currentDate.plusDays(1);
+                }
+                if (totalCost < minCost || (totalCost == minCost && hotel.getRating() < maxRating)) {
+                    minCost = totalCost;
+                    cheapestBestRatedHotel = hotel.getName();
+                    maxRating = hotel.getRating();
+                }
+            }
+            System.out.println("--------------------------------------");
+            System.out.println(cheapestBestRatedHotel + ", Rating: " + maxRating + " and Total Rates: $" + minCost);
+            System.out.println("--------------------------------------");
+        }
+
+    }
+
+    public void findCheapestBestRatedHotelForRegularCustomers(Map<String, Hotels> hotels) {
+        Scanner scanner = new Scanner(System.in);
+
+
+        System.out.println("Enter start date (DDMMYY):");
+        String startDateString = scanner.next();
+
+        System.out.println("Enter end date (DDMMYY):");
+        String endDateString = scanner.next();
+
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMuu", Locale.ENGLISH); // Note the change in format string
+        LocalDate startDate = LocalDate.parse(startDateString, formatter);
+        LocalDate endDate = LocalDate.parse(endDateString, formatter);
+
+
+
+        long totalDays = endDate.toEpochDay() - startDate.toEpochDay() + 1;
+
+
+        String cheapestBestRatedHotel = hotels.entrySet().stream()
+                .map(entry -> {
+                    int totalCost = entry.getValue().calculateTotalCostForRegularCustomer(startDate, endDate);
+                    return Map.entry(entry.getKey(), totalCost);
+                })
+                .min(Map.Entry.comparingByValue())
+                .orElseThrow()
+                .getKey();
+
+
+        System.out.println("--------------------------------------");
+        System.out.println("Cheapest Best Rated Hotel for the date range " + startDateString + " to " + endDateString + " for a Regular Customer:");
+        System.out.println(cheapestBestRatedHotel + ", Rating: " + hotels.get(cheapestBestRatedHotel).getRating() + " and Total Rates: $" + hotels.get(cheapestBestRatedHotel).calculateTotalCostForRegularCustomer(startDate, endDate));
+        System.out.println("--------------------------------------");
+    }
+
+    public void findCheapestBestRatedHotelForRewardCustomer(Map<String, Hotels> hotels) {
+        System.out.println("Enter start date (YYYY MM DD): ");
+        int startYear = s.nextInt();
+        int startMonth = s.nextInt();
+        int startDay = s.nextInt();
+        System.out.println("Enter end date (YYYY MM DD): ");
+        int endYear = s.nextInt();
+        int endMonth = s.nextInt();
+        int endDay = s.nextInt();
+
+        LocalDate startDate = LocalDate.of(startYear, startMonth, startDay);
+        LocalDate endDate = LocalDate.of(endYear, endMonth, endDay);
+
+        Hotels cheapestBestRatedHotel = hotels.values().stream()
+                .filter(hotel -> hotel.getWeekDayRate() > 0 && hotel.getWeekEndRate() > 0)
+                .min((hotel1, hotel2) -> {
+                    int totalCost1 = calculateTotalCostForRewardCustomer(hotel1, startDate, endDate);
+                    int totalCost2 = calculateTotalCostForRewardCustomer(hotel2, startDate, endDate);
+                    if (totalCost1 != totalCost2) {
+                        return Integer.compare(totalCost1, totalCost2);
+                    } else {
+                        return Integer.compare(hotel2.getRating(), hotel1.getRating());
+                    }
+                })
+                .orElse(null);
+
+        if (cheapestBestRatedHotel != null) {
+            int totalCost = calculateTotalCostForRewardCustomer(cheapestBestRatedHotel, startDate, endDate);
+            System.out.println("Cheapest Best Rated Hotel: " + cheapestBestRatedHotel.getName() +
+                    ", Rating: " + cheapestBestRatedHotel.getRating() + ", Total Rates: $" + totalCost);
+        } else {
+            System.out.println("No hotels found with valid rates.");
+        }
+    }
+
+    private int calculateTotalCostForRewardCustomer(Hotels hotel, LocalDate startDate, LocalDate endDate) {
+        int totalCost = 0;
+        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+            int dayOfWeek = date.getDayOfWeek().getValue();
+            if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+                totalCost += hotel.getWeekDayReward();
+            } else {
+                totalCost += hotel.getWeekEndReward();
+            }
+        }
+        return totalCost;
+    }
 }
+
 
 
 

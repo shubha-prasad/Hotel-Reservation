@@ -1,4 +1,7 @@
 package com.shubha.hotel.entity;
+
+import java.time.LocalDate;
+
 public class Hotels {
     private String name;
     private int rating;
@@ -62,13 +65,13 @@ public class Hotels {
     public int getWeekEndReward() {
         return weekEndReward;
     }
+
     public void setWeekEndReward(int weekEndReward) {
         this.weekEndReward = weekEndReward;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Hotels{" +
                 "\nname='" + name +
                 "\nrating=" + rating +
@@ -76,5 +79,21 @@ public class Hotels {
                 "\nweekEndRate=" + weekEndRate +
                 "\nweekDayReward" + weekDayReward +
                 "\nweekEndReward=" + weekEndReward;
+    }
+
+    public int calculateTotalCostForRewardCustomer(LocalDate startDate, LocalDate endDate) {
+        int totalCost = 0;
+        LocalDate currentDate = startDate;
+        while (!currentDate.isAfter(endDate)) {
+            int dayOfWeek = currentDate.getDayOfWeek().getValue();
+            int rate = (dayOfWeek >= 1 && dayOfWeek <= 5) ? weekDayReward : weekEndReward;
+            totalCost += rate;
+            currentDate = currentDate.plusDays(1);
+        }
+        return totalCost;
+    }
+
+    public int calculateTotalCostForRegularCustomer(LocalDate startDate, LocalDate endDate) {
+        return 0;
     }
 }
