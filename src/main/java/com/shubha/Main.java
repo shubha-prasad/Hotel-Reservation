@@ -80,6 +80,10 @@ public class Main {
                    h.cheapestBestRatedForReward(hotel);
                    break;
                }
+               case 11:{
+                   h.findCheapestBestRatedHotelForRewardCustomer(hotel);
+                   break;
+               }
                case 12:{
                    h.findCheapestBestRatedHotelForRegularCustomers(hotel);
                    break;
